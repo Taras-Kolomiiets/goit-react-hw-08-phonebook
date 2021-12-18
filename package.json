@@ -1,9 +1,13 @@
 {
-  "name": "goit-react-hw-07-phonebook",
+  "name": "goit-react-hw-08-phonebook",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Taras-Kolomiiets.github.io/goit-hw-07-phonebook",
+  "homepage": "https://Taras-Kolomiiets.github.io/goit-hw-08-phonebook",
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@material-ui/core": "^4.12.3",
+    "@mui/material": "^5.2.4",
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
@@ -11,6 +15,7 @@
     "@types/react-redux": "^7.1.20",
     "axios": "^0.24.0",
     "formik": "^2.2.9",
+    "formik-material-ui": "^4.0.0-alpha.2",
     "gh-pages": "^3.2.3",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
