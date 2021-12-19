@@ -1,7 +1,4 @@
-import axios from 'axios';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-axios.defaults.baseURL = 'https://connections-api.herokuapp.com';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -28,11 +25,13 @@ export const authApi = createApi({
           query: (token) => ({
               url: '/users/logout',
               method: 'POST',
-              body: token
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
           }),
           invalidatesTags: ['Auth']
       }),
   }),
 })
 
-export const {  useRegisterUserMutation } = authApi;
+export const {  useRegisterUserMutation, useLoginUserMutation, useLogoutUserMutation } = authApi;
