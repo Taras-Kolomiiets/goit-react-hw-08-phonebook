@@ -3,35 +3,43 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import FormButton from '../FormButton/FormButton';
 import s from './ContactForm.module.css';
 import { useCreateContactMutation } from 'redux/contacts/contacts-slice';
-import IContacts from 'interfaces/IContacts'
-import IContact from 'interfaces/IContact'
+import IContacts from 'interfaces/IContacts';
+import IContact from 'interfaces/IContact';
 
-
-export default function ContactForm({contacts}: IContacts) {
+export default function ContactForm({ contacts, token }: IContacts) {
   const [createContact] = useCreateContactMutation();
 
   const isInContacts = (name: string) => {
     name = name.toLowerCase();
     return (
-      contacts.filter((contact: IContact) => contact.name.toLowerCase().includes(name))
-        .length > 0
+      contacts.filter((contact: IContact) =>
+        contact.name.toLowerCase().includes(name),
+      ).length > 0
     );
   };
 
-  const addContactToPhonebook = ({ name, phone }: {name: string, phone: string}) => {
+  const addContactToPhonebook = ({
+    name,
+    number,
+  }: {
+    name: string;
+    number: string;
+  }) => {
     if (isInContacts(name)) {
       alert(`${name} is already in contacts`);
       return;
     }
-    const contact = {name, phone}
+    const contact = { name, number };
 
-    createContact(contact);
+    console.log({ contact, token });
+
+    createContact({ contact, token });
   };
 
   return (
     <div>
       <Formik
-        initialValues={{ name: '', phone: '' }}
+        initialValues={{ name: '', number: '' }}
         validationSchema={Yup.object({
           name: Yup.string()
             .required()
@@ -39,7 +47,7 @@ export default function ContactForm({contacts}: IContacts) {
               /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/,
               "Name can contain only letters, ', - and space.",
             ),
-          phone: Yup.string()
+          number: Yup.string()
             .required()
             .matches(
               /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
@@ -70,12 +78,12 @@ export default function ContactForm({contacts}: IContacts) {
             Phone number:
             <Field
               className={s.fieldInput}
-              name="phone"
+              name="number"
               type="tel"
               placeholder="enter your phone number"
             />
             <ErrorMessage
-              name="phone"
+              name="number"
               component="span"
               className={s.validatorError}
             />

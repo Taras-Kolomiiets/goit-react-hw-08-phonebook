@@ -1,5 +1,6 @@
-import IContact from './IContact'
+import IContact from './IContact';
 
 export default interface IState {
-   contacts: IContact[]
+  contacts: IContact[];
+  token?: string;
 }
