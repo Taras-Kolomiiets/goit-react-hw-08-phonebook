@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ContactForm from './components/ContactForm';
 import ContactList from './components/ContactList';
 import Filter from './components/Filter';
@@ -13,6 +13,7 @@ import {
   useRegisterUserMutation,
   useLoginUserMutation,
   useLogoutUserMutation,
+  useGetCurrentUserMutation,
 } from 'redux/auth/auth-slice';
 import LoginForm from 'components/LoginForm';
 import UserMenu from 'components/UserMenu';
@@ -29,6 +30,19 @@ export default function App() {
   const [registerUser] = useRegisterUserMutation();
   const [loginUser] = useLoginUserMutation();
   const [logoutUser] = useLogoutUserMutation();
+  const [getCurrentUser] = useGetCurrentUserMutation();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const user = await getCurrentUser(localStorage.getItem('token'));
+      await setToken(localStorage.getItem('token'));
+      if ('data' in user) {
+        await setUser(user.data);
+      }
+    }
+
+    fetchUser();
+  }, [getCurrentUser]);
 
   const onRegister = async (credentials: any) => {
     try {
@@ -48,6 +62,7 @@ export default function App() {
       if ('data' in result) {
         setUser(result.data.user);
         setToken(result.data.token);
+        localStorage.setItem('token', result.data.token);
       }
     } catch (err) {
       console.log(err);
@@ -59,6 +74,7 @@ export default function App() {
       await logoutUser(token);
       setUser(null);
       setToken('');
+      localStorage.removeItem('token');
     } catch (err) {
       console.log(err);
     }
