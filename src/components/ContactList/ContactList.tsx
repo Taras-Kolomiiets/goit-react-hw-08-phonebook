@@ -17,9 +17,10 @@ export default function ContactList({
 }: IContactsList) {
   return (
     <ul className={s.list}>
-      {contacts.map((contact: IContact) => (
-        <ContactItem contact={contact} onDelete={onDelete} onEdit={onEdit} />
-      ))}
+      {contacts &&
+        contacts.map((contact: IContact) => (
+          <ContactItem contact={contact} onDelete={onDelete} onEdit={onEdit} />
+        ))}
     </ul>
   );
 }

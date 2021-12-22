@@ -16,6 +16,7 @@ import {
 } from 'redux/auth/auth-slice';
 import LoginForm from 'components/LoginForm';
 import UserMenu from 'components/UserMenu';
+import ContactsPage from 'components/ContactsPage';
 
 export default function App() {
   const [filter, setFilter] = useState<string>('');
@@ -84,14 +85,12 @@ export default function App() {
       <LoginForm loginUser={onLogin} />
 
       <h2>Contacts</h2>
-      <Filter filterContacts={filterContacts} />
-      {data && (
-        <ContactList
-          contacts={data}
-          onDelete={onDeleteContact}
-          onEdit={onEdit}
-        />
-      )}
+      <ContactsPage
+        filterContacts={filterContacts}
+        contacts={data}
+        onDelete={onDeleteContact}
+        onEdit={onEdit}
+      />
     </div>
   );
 }
