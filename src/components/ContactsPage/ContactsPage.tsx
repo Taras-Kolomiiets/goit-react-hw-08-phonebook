@@ -21,6 +21,7 @@ export default function ContactsPage({
   contacts,
   onDelete,
   onEdit,
+  createContact,
 }: any) {
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [currentContact, setCurrentContact] = useState(null);
@@ -50,7 +51,11 @@ export default function ContactsPage({
         </Button>
         <Typography variant="h3">Contacts</Typography>
         <Filter filterContacts={filterContacts} />
-        <ContactList contacts={contacts} onDelete={onDelete} onEdit={onEdit} />
+        <ContactList
+          contacts={contacts}
+          onDelete={onDelete}
+          onEdit={handleCurrentContact}
+        />
       </Container>
 
       {shouldOpenDialog && (
@@ -59,6 +64,8 @@ export default function ContactsPage({
           onClose={handleDialogClose}
           contact={currentContact}
           contacts={contacts}
+          editContact={onEdit}
+          addContact={createContact}
         />
       )}
     </>

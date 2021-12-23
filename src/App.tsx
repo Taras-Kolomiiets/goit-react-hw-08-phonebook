@@ -7,6 +7,7 @@ import RegisterForm from 'components/RegisterForm';
 import {
   useDeleteContactMutation,
   useGetContactsQuery,
+  useCreateContactMutation,
   useUpdateContactMutation,
 } from 'redux/contacts/contacts-slice';
 import {
@@ -25,6 +26,7 @@ export default function App() {
   const [token, setToken] = useState<any>('');
 
   const { data } = useGetContactsQuery(token);
+  const [createContact] = useCreateContactMutation();
   const [deleteContact] = useDeleteContactMutation();
   const [updateContact] = useUpdateContactMutation();
   const [registerUser] = useRegisterUserMutation();
@@ -84,6 +86,10 @@ export default function App() {
     deleteContact({ id, token });
   };
 
+  const onCreateContact = (contact: any) => {
+    createContact({ contact, token });
+  };
+
   const onEdit = (contact: any, id: string) => {
     updateContact({ id, token, contact });
   };
@@ -103,6 +109,7 @@ export default function App() {
       <h2>Contacts</h2>
       <ContactsPage
         filterContacts={filterContacts}
+        createContact={onCreateContact}
         contacts={data}
         onDelete={onDeleteContact}
         onEdit={onEdit}

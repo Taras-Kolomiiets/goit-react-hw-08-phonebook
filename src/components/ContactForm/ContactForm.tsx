@@ -6,9 +6,11 @@ import { useCreateContactMutation } from 'redux/contacts/contacts-slice';
 import IContacts from 'interfaces/IContacts';
 import IContact from 'interfaces/IContact';
 
-export default function ContactForm({ contacts, token }: IContacts) {
-  const [createContact] = useCreateContactMutation();
-
+export default function ContactForm({
+  contacts,
+  token,
+  createContact,
+}: IContacts) {
   const isInContacts = (name: string) => {
     name = name.toLowerCase();
     return (

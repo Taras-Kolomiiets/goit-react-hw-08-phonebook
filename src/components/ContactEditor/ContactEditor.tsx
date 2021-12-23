@@ -23,6 +23,8 @@ export default function ContactEditor({
   onClose,
   contact,
   contacts,
+  editContact,
+  addContact,
 }: any) {
   const c = useStyles();
 
@@ -34,30 +36,32 @@ export default function ContactEditor({
     );
   };
 
-  // const addContact = ({ name, number }: any) => {
-  //   dispatch(contactsOperations.addContact({ name, number }));
-  //   onClose();
-  // };
+  const createContact = ({ name, number }: any) => {
+    addContact({ name, number });
+    onClose();
+  };
 
-  // const updateContact = ({ name, number }: any) => {
-  //   const updatedContact = { ...contact, name, number };
-  //   dispatch(contactsOperations.updateContact(updatedContact));
-  // };
+  const updateContact = ({ name, number }: any) => {
+    const updatedContact = { ...contact, name, number };
+    console.log(updatedContact.id);
 
-  // const onSubmit = (values, { setSubmitting }) => {
-  //   if (isInContacts(values.name)) {
-  //     alert(`${values.name} is already in contacts`);
-  //     setSubmitting(false);
-  //     return;
-  //   }
+    editContact(updatedContact, updatedContact.id);
+  };
 
-  //   if (contact) {
-  //     updateContact(values);
-  //   } else {
-  //     addContact(values);
-  //   }
-  //   onClose();
-  // };
+  const onSubmit = (values: any, { setSubmitting }: any) => {
+    if (isInContacts(values.name)) {
+      alert(`${values.name} is already in contacts`);
+      setSubmitting(false);
+      return;
+    }
+
+    if (contact) {
+      updateContact(values);
+    } else {
+      createContact(values);
+    }
+    onClose();
+  };
 
   return (
     <Dialog
@@ -90,7 +94,7 @@ export default function ContactEditor({
               )
               .required(),
           })}
-          onSubmit={() => console.log('5')}
+          onSubmit={onSubmit}
         >
           {({ isSubmitting }: any) => (
             <Form>
