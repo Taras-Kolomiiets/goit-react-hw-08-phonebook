@@ -1,9 +1,12 @@
 import './App.css';
-import { useState, useEffect } from 'react';
-import ContactForm from './components/ContactForm';
-import ContactList from './components/ContactList';
-import Filter from './components/Filter';
-import RegisterForm from 'components/RegisterForm';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
+import { Navigate, Routes, Route } from 'react-router-dom';
+import AppBar from 'components/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { LinearProgress } from '@material-ui/core';
+import PrivateRoute from 'components/PrivateRoute';
+import PublicRoute from 'components/PublicRoute';
+
 import {
   useDeleteContactMutation,
   useGetContactsQuery,
@@ -16,14 +19,21 @@ import {
   useLogoutUserMutation,
   useGetCurrentUserMutation,
 } from 'redux/auth/auth-slice';
-import LoginForm from 'components/LoginForm';
-import UserMenu from 'components/UserMenu';
-import ContactsPage from 'components/ContactsPage';
+
+const AuthPage = lazy(
+  () => import('./pages/AuthPage' /* webpackChunkName: "auth-page" */),
+);
+
+const ContactsPage = lazy(
+  () => import('./pages/ContactsPage' /* webpackChunkName: "contacts-page" */),
+);
 
 export default function App() {
   const [filter, setFilter] = useState<string>('');
   const [user, setUser] = useState<any>(null);
   const [token, setToken] = useState<any>('');
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [isLogging, setIsLogging] = useState<boolean>(false);
 
   const { data } = useGetContactsQuery(token);
   const [createContact] = useCreateContactMutation();
@@ -100,20 +110,50 @@ export default function App() {
 
   return (
     <div className="App">
-      {user && <UserMenu userName={user.name} onLogOut={onLogout} />}
-
-      <ContactForm contacts={data} token={token} />
-      <RegisterForm registerUser={onRegister} />
-      <LoginForm loginUser={onLogin} />
-
-      <h2>Contacts</h2>
-      <ContactsPage
-        filterContacts={filterContacts}
-        createContact={onCreateContact}
-        contacts={data}
-        onDelete={onDeleteContact}
-        onEdit={onEdit}
-      />
+      <CssBaseline />
+      {isLogging ? (
+        <LinearProgress />
+      ) : (
+        <>
+          {user && (
+            <AppBar
+              isLoggedIn={isLoggedIn}
+              userName={user.name}
+              onLogOut={onLogout}
+            />
+          )}
+          <Suspense fallback={<LinearProgress />}>
+            <Routes>
+              <PrivateRoute path="/" exact redirectTo="/login">
+                <Navigate to="/contacts" />
+              </PrivateRoute>
+              <PublicRoute path="/login" restricted redirectTo="/contacts">
+                <AuthPage
+                  contacts={data}
+                  token={token}
+                  registerUser={onRegister}
+                  loginUser={onLogin}
+                />
+              </PublicRoute>
+              <PublicRoute path="/register" restricted redirectTo="/contacts">
+                <AuthPage registerUser={onRegister} loginUser={onLogin} />
+              </PublicRoute>
+              <PrivateRoute path="/contacts">
+                <ContactsPage
+                  filterContacts={filterContacts}
+                  createContact={onCreateContact}
+                  contacts={data}
+                  onDelete={onDeleteContact}
+                  onEdit={onEdit}
+                />
+              </PrivateRoute>
+              <Route>
+                <Navigate to="/" />
+              </Route>
+            </Routes>
+          </Suspense>
+        </>
+      )}
     </div>
   );
 }

@@ -5,8 +5,6 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://connections-api.herokuapp.com',
   }),
-  keepUnusedDataFor: 30,
-  refetchOnMountOrArgChange: 30 * 60,
   tagTypes: ['Auth'],
   endpoints: builder => ({
     registerUser: builder.mutation({
