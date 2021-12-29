@@ -1,15 +1,5 @@
-import { Navigate, Route } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
-export default function PublicRoute({
-  children,
-  isLoggedIn,
-  redirectTo = '/',
-  restricted = false,
-  ...routeProps
-}: any) {
-  return (
-    <Route {...routeProps}>
-      {restricted && isLoggedIn ? <Navigate to={redirectTo} /> : children}
-    </Route>
-  );
+export default function PublicRoute({ children }: any) {
+  return children;
 }

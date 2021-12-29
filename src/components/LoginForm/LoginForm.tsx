@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function LoginForm({loginUser}: any) {
+export default function LoginForm({ loginUser }: any) {
   const c = useStyles();
 
   return (
@@ -25,8 +25,8 @@ export default function LoginForm({loginUser}: any) {
             .required('Required'),
         })}
         onSubmit={(values, { setSubmitting }) => {
-            loginUser(values);
-            setSubmitting(false);
+          loginUser(values);
+          setSubmitting(false);
         }}
       >
         <Form>
@@ -46,11 +46,7 @@ export default function LoginForm({loginUser}: any) {
             label="Password"
           />
           <br />
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
+          <Button variant="contained" color="primary" type="submit">
             Login
           </Button>
         </Form>

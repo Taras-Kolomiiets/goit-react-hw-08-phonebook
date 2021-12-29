@@ -124,32 +124,60 @@ export default function App() {
           )}
           <Suspense fallback={<LinearProgress />}>
             <Routes>
-              <PrivateRoute path="/" exact redirectTo="/login">
-                <Navigate to="/contacts" />
-              </PrivateRoute>
-              <PublicRoute path="/login" restricted redirectTo="/contacts">
-                <AuthPage
-                  contacts={data}
-                  token={token}
-                  registerUser={onRegister}
-                  loginUser={onLogin}
-                />
-              </PublicRoute>
-              <PublicRoute path="/register" restricted redirectTo="/contacts">
-                <AuthPage registerUser={onRegister} loginUser={onLogin} />
-              </PublicRoute>
-              <PrivateRoute path="/contacts">
-                <ContactsPage
-                  filterContacts={filterContacts}
-                  createContact={onCreateContact}
-                  contacts={data}
-                  onDelete={onDeleteContact}
-                  onEdit={onEdit}
-                />
-              </PrivateRoute>
-              <Route>
-                <Navigate to="/" />
-              </Route>
+              <Route
+                path="/"
+                element={
+                  <PrivateRoute>
+                    <AuthPage
+                      contacts={data}
+                      token={token}
+                      registerUser={onRegister}
+                      loginUser={onLogin}
+                    />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/login/*"
+                element={
+                  <PublicRoute>
+                    <AuthPage
+                      contacts={data}
+                      token={token}
+                      registerUser={onRegister}
+                      loginUser={onLogin}
+                    />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/register/*"
+                element={
+                  <PublicRoute>
+                    <AuthPage
+                      contacts={data}
+                      token={token}
+                      registerUser={onRegister}
+                      loginUser={onLogin}
+                    />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/contacts"
+                element={
+                  <PrivateRoute>
+                    <ContactsPage
+                      filterContacts={filterContacts}
+                      createContact={onCreateContact}
+                      contacts={data}
+                      onDelete={onDeleteContact}
+                      onEdit={onEdit}
+                    />
+                  </PrivateRoute>
+                }
+              />
+              {/* <Route path="/" element={<Navigate to="/" />} /> */}
             </Routes>
           </Suspense>
         </>

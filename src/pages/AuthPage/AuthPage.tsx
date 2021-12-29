@@ -33,6 +33,7 @@ export default function AuthPage({
   const routes = ['/login', '/register'];
   const location = useLocation();
   const c = useStyles();
+  console.log(location.pathname);
 
   return (
     <Container maxWidth="sm" className={c.root}>
@@ -55,14 +56,22 @@ export default function AuthPage({
         </Paper>
         <CardContent>
           <Container className={c.cardContent}>
-            <Routes>
-              <Route path="/login">
-                <LoginForm loginUser={loginUser} />
-              </Route>
-              <Route path="/register">
-                <RegisterForm registerUser={registerUser} />
-              </Route>
-            </Routes>
+            {location.pathname === '/login' && (
+              <LoginForm loginUser={loginUser} />
+            )}
+            {location.pathname === '/register' && (
+              <RegisterForm registerUser={registerUser} />
+            )}
+            {/* <Routes>
+              <Route
+                path="/login"
+                element={<LoginForm loginUser={loginUser} />}
+              />
+              <Route
+                path="/register"
+                element={<RegisterForm registerUser={registerUser} />}
+              />
+            </Routes> */}
           </Container>
         </CardContent>
       </Card>

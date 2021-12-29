@@ -1,13 +1,5 @@
-import { Navigate, Route } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
-export default function PrivateRoute({
-  children,
-  redirectTo = '/',
-  ...routeProps
-}: any) {
-  return (
-    <Route {...routeProps}>
-      {true ? children : <Navigate to={redirectTo} />}
-    </Route>
-  );
+export default function PrivateRoute({ children }: any) {
+  return children;
 }
