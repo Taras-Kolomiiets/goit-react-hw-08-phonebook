@@ -2,7 +2,7 @@
   "name": "goit-react-hw-08-phonebook",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/taras-kolomiiets/goit-react-hw-08-phonebook.git",
+  "homepage": "https://github.com/Taras-Kolomiiets/goit-react-hw-08-phonebook.git",
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
