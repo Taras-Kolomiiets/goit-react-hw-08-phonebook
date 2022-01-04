@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -7,11 +8,9 @@ import {
   Tab,
   Tabs,
 } from '@material-ui/core';
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
-// import ErrorNotification from './../../components/ErrorNotification/ErrorNotification';
 import LoginForm from 'components/LoginForm';
-import React from 'react';
 import RegisterForm from 'components/RegisterForm';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -24,16 +23,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function AuthPage({
-  error,
-  isLoading,
-  registerUser,
-  loginUser,
-}: any) {
+export default function AuthPage({ isLoading, registerUser, loginUser }: any) {
   const routes = ['/login', '/register'];
   const location = useLocation();
   const c = useStyles();
-  console.log(location.pathname);
 
   return (
     <Container maxWidth="sm" className={c.root}>
@@ -62,22 +55,9 @@ export default function AuthPage({
             {location.pathname === '/register' && (
               <RegisterForm registerUser={registerUser} />
             )}
-            {/* <Routes>
-              <Route
-                path="/login"
-                element={<LoginForm loginUser={loginUser} />}
-              />
-              <Route
-                path="/register"
-                element={<RegisterForm registerUser={registerUser} />}
-              />
-            </Routes> */}
           </Container>
         </CardContent>
       </Card>
-      {/* {error && (
-        <ErrorNotification message={error} action={authActions.resetError} />
-      )} */}
       {isLoading && <LinearProgress />}
     </Container>
   );

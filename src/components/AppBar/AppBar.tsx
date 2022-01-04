@@ -1,5 +1,4 @@
 import { AppBar as MUIAppBar, Toolbar, Typography } from '@material-ui/core';
-
 import React from 'react';
 import UserMenu from 'components/UserMenu';
 import { makeStyles } from '@material-ui/core/styles';

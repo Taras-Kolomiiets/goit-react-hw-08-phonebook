@@ -5,8 +5,8 @@ import { TextField } from 'formik-material-ui';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-  field: {
-    marginBottom: theme.spacing(2),
+  textField: {
+    marginBottom: `${theme.spacing(2)}px !important`,
   },
 }));
 
@@ -32,7 +32,7 @@ export default function LoginForm({ loginUser }: any) {
         <Form>
           <Field
             component={TextField}
-            className={c.field}
+            className={c.textField}
             name="email"
             type="email"
             label="Email"
@@ -40,7 +40,7 @@ export default function LoginForm({ loginUser }: any) {
           <br />
           <Field
             component={TextField}
-            className={c.field}
+            className={c.textField}
             name="password"
             type="password"
             label="Password"

@@ -7,11 +7,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   field: {
-    marginBottom: theme.spacing(2),
+    marginBottom: `${theme.spacing(2)}px !important`,
   },
 }));
 
-export default function RegisterForm({registerUser}: any) {
+export default function RegisterForm({ registerUser }: any) {
   const c = useStyles();
 
   return (
@@ -26,9 +26,9 @@ export default function RegisterForm({registerUser}: any) {
             .max(15, 'Password should be maximum 15 symbols')
             .required('Required'),
         })}
-        onSubmit={(values, { setSubmitting }) => {       
-        registerUser(values);
-        setSubmitting(false);
+        onSubmit={(values, { setSubmitting }) => {
+          registerUser(values);
+          setSubmitting(false);
         }}
       >
         <Form>
@@ -56,11 +56,7 @@ export default function RegisterForm({registerUser}: any) {
             label="Password"
           />
           <br />
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
+          <Button variant="contained" color="primary" type="submit">
             Register
           </Button>
         </Form>

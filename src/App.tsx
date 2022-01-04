@@ -1,6 +1,6 @@
 import './App.css';
-import React, { Suspense, lazy, useState, useEffect } from 'react';
-import { Navigate, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy, useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import AppBar from 'components/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { LinearProgress } from '@material-ui/core';
@@ -29,13 +29,11 @@ const ContactsPage = lazy(
 );
 
 export default function App() {
-  const [filter, setFilter] = useState<string>('');
   const [user, setUser] = useState<any>(null);
   const [token, setToken] = useState<any>('');
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
-  const [isLogging, setIsLogging] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-  const { data } = useGetContactsQuery(token);
+  const { data, isLoading } = useGetContactsQuery(token);
   const [createContact] = useCreateContactMutation();
   const [deleteContact] = useDeleteContactMutation();
   const [updateContact] = useUpdateContactMutation();
@@ -47,9 +45,10 @@ export default function App() {
   useEffect(() => {
     async function fetchUser() {
       const user = await getCurrentUser(localStorage.getItem('token'));
-      await setToken(localStorage.getItem('token'));
+      setToken(localStorage.getItem('token'));
       if ('data' in user) {
-        await setUser(user.data);
+        setUser(user.data);
+        setIsLoggedIn(true);
       }
     }
 
@@ -62,6 +61,7 @@ export default function App() {
       if ('data' in result) {
         setUser(result.data.user);
         setToken(result.data.token);
+        setIsLoggedIn(true);
       }
     } catch (err) {
       console.log(err);
@@ -74,6 +74,7 @@ export default function App() {
       if ('data' in result) {
         setUser(result.data.user);
         setToken(result.data.token);
+        setIsLoggedIn(true);
         localStorage.setItem('token', result.data.token);
       }
     } catch (err) {
@@ -86,6 +87,7 @@ export default function App() {
       await logoutUser(token);
       setUser(null);
       setToken('');
+      setIsLoggedIn(false);
       localStorage.removeItem('token');
     } catch (err) {
       console.log(err);
@@ -104,30 +106,24 @@ export default function App() {
     updateContact({ id, token, contact });
   };
 
-  const filterContacts = (query: string) => {
-    setFilter(query);
-  };
-
   return (
     <div className="App">
       <CssBaseline />
-      {isLogging ? (
+      {isLoading ? (
         <LinearProgress />
       ) : (
         <>
-          {user && (
-            <AppBar
-              isLoggedIn={isLoggedIn}
-              userName={user.name}
-              onLogOut={onLogout}
-            />
-          )}
+          <AppBar
+            isLoggedIn={isLoggedIn}
+            userName={user?.name}
+            onLogOut={onLogout}
+          />
           <Suspense fallback={<LinearProgress />}>
             <Routes>
               <Route
                 path="/"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute isLoggedIn={isLoggedIn} restricted>
                     <AuthPage
                       contacts={data}
                       token={token}
@@ -138,9 +134,13 @@ export default function App() {
                 }
               />
               <Route
-                path="/login/*"
+                path="/login"
                 element={
-                  <PublicRoute>
+                  <PublicRoute
+                    isLoggedIn={isLoggedIn}
+                    redirectTo="/contacts"
+                    restricted
+                  >
                     <AuthPage
                       contacts={data}
                       token={token}
@@ -151,9 +151,13 @@ export default function App() {
                 }
               />
               <Route
-                path="/register/*"
+                path="/register"
                 element={
-                  <PublicRoute>
+                  <PublicRoute
+                    restricted
+                    redirectTo="/contacts"
+                    isLoggedIn={isLoggedIn}
+                  >
                     <AuthPage
                       contacts={data}
                       token={token}
@@ -166,9 +170,9 @@ export default function App() {
               <Route
                 path="/contacts"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute redirectTo="/login" isLoggedIn={isLoggedIn}>
                     <ContactsPage
-                      filterContacts={filterContacts}
+                      isLoading={isLoading}
                       createContact={onCreateContact}
                       contacts={data}
                       onDelete={onDeleteContact}
@@ -177,7 +181,6 @@ export default function App() {
                   </PrivateRoute>
                 }
               />
-              {/* <Route path="/" element={<Navigate to="/" />} /> */}
             </Routes>
           </Suspense>
         </>

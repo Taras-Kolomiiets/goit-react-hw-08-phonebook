@@ -17,18 +17,23 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ContactsPage({
-  filterContacts,
   contacts,
   onDelete,
   onEdit,
   createContact,
+  isLoading,
 }: any) {
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [currentContact, setCurrentContact] = useState(null);
+  const [filter, setFilter] = useState<string>('');
 
   const shouldOpenDialog = Boolean(isOpenDialog || currentContact);
 
   const c = useStyles();
+
+  const filterContacts = (query: string) => {
+    setFilter(query);
+  };
 
   const handleDialogOpen = () => {
     setIsOpenDialog(true);
@@ -43,6 +48,13 @@ export default function ContactsPage({
     setCurrentContact(contact);
   };
 
+  const filterContactsByQuery = () => {
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter((contact: any) =>
+      contact.name.toLowerCase().includes(normalizedFilter),
+    );
+  };
+
   return (
     <>
       <Container maxWidth="md" className={c.root}>
@@ -52,10 +64,11 @@ export default function ContactsPage({
         <Typography variant="h3">Contacts</Typography>
         <Filter filterContacts={filterContacts} />
         <ContactList
-          contacts={contacts}
+          contacts={filterContactsByQuery()}
           onDelete={onDelete}
           onEdit={handleCurrentContact}
         />
+        {isLoading && <LinearProgress />}
       </Container>
 
       {shouldOpenDialog && (
