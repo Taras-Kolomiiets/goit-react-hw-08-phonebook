@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { TextField } from '@material-ui/core';
 
-export default function Filter({ filterContacts }: any) {
+interface IFilter {
+  filterContacts: (query: string) => void;
+}
+
+export default function Filter({ filterContacts }: IFilter) {
   const [filterValue, setFilterValue] = useState<string>('');
 
   useEffect(() => {

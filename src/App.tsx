@@ -1,4 +1,3 @@
-import './App.css';
 import { Suspense, lazy, useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AppBar from 'components/AppBar';
@@ -19,6 +18,10 @@ import {
   useLogoutUserMutation,
   useGetCurrentUserMutation,
 } from 'redux/auth/auth-slice';
+import IUser from 'interfaces/IUser';
+import IRegister from 'interfaces/IRegister';
+import IContact from 'interfaces/IContact';
+import ILogin from 'interfaces/ILogin';
 
 const AuthPage = lazy(
   () => import('./pages/AuthPage' /* webpackChunkName: "auth-page" */),
@@ -29,8 +32,8 @@ const ContactsPage = lazy(
 );
 
 export default function App() {
-  const [user, setUser] = useState<any>(null);
-  const [token, setToken] = useState<any>('');
+  const [user, setUser] = useState<IUser | null>(null);
+  const [token, setToken] = useState<string | null>('');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const { data, isLoading } = useGetContactsQuery(token);
@@ -55,7 +58,7 @@ export default function App() {
     fetchUser();
   }, [getCurrentUser]);
 
-  const onRegister = async (credentials: any) => {
+  const onRegister = async (credentials: IRegister) => {
     try {
       const result = await registerUser(credentials);
       if ('data' in result) {
@@ -68,7 +71,7 @@ export default function App() {
     }
   };
 
-  const onLogin = async (credentials: any) => {
+  const onLogin = async (credentials: ILogin) => {
     try {
       const result = await loginUser(credentials);
       if ('data' in result) {
@@ -98,11 +101,11 @@ export default function App() {
     deleteContact({ id, token });
   };
 
-  const onCreateContact = (contact: any) => {
+  const onCreateContact = (contact: IContact) => {
     createContact({ contact, token });
   };
 
-  const onEdit = (contact: any, id: string) => {
+  const onEdit = (contact: IContact, id: string) => {
     updateContact({ id, token, contact });
   };
 
@@ -125,8 +128,7 @@ export default function App() {
                 element={
                   <PrivateRoute isLoggedIn={isLoggedIn} restricted>
                     <AuthPage
-                      contacts={data}
-                      token={token}
+                      isLoading={isLoading}
                       registerUser={onRegister}
                       loginUser={onLogin}
                     />
@@ -142,8 +144,7 @@ export default function App() {
                     restricted
                   >
                     <AuthPage
-                      contacts={data}
-                      token={token}
+                      isLoading={isLoading}
                       registerUser={onRegister}
                       loginUser={onLogin}
                     />
@@ -159,8 +160,7 @@ export default function App() {
                     isLoggedIn={isLoggedIn}
                   >
                     <AuthPage
-                      contacts={data}
-                      token={token}
+                      isLoading={isLoading}
                       registerUser={onRegister}
                       loginUser={onLogin}
                     />

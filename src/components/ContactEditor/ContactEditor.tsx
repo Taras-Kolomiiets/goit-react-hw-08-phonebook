@@ -11,12 +11,22 @@ import {
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { makeStyles } from '@material-ui/core/styles';
+import IContact from 'interfaces/IContact';
 
 const useStyles = makeStyles(theme => ({
   field: {
     marginBottom: `${theme.spacing(3)}px !important`,
   },
 }));
+
+interface IContactEditor {
+  isOpen: boolean;
+  onClose: () => void;
+  contact: IContact | null;
+  contacts: IContact[];
+  editContact: (updatedContact: IContact, updatedContactId: string) => void;
+  addContact: (values: IContact) => void;
+}
 
 export default function ContactEditor({
   isOpen,
@@ -25,30 +35,30 @@ export default function ContactEditor({
   contacts,
   editContact,
   addContact,
-}: any) {
+}: IContactEditor) {
   const c = useStyles();
 
   const isInContacts = (name: string) => {
     name = name.toLowerCase();
     return (
-      contacts.filter((contact: any) => contact.name.toLowerCase() === name)
-        .length > 0
+      contacts.filter(
+        (contact: IContact) => contact.name.toLowerCase() === name,
+      ).length > 0
     );
   };
 
-  const createContact = ({ name, number }: any) => {
+  const createContact = ({ name, number }: IContact) => {
     addContact({ name, number });
     onClose();
   };
 
-  const updateContact = ({ name, number }: any) => {
+  const updateContact = ({ name, number }: IContact) => {
     const updatedContact = { ...contact, name, number };
-    console.log(updatedContact.id);
-
-    editContact(updatedContact, updatedContact.id);
+    const updatedContactId = updatedContact.id;
+    editContact(updatedContact, updatedContactId!);
   };
 
-  const onSubmit = (values: any, { setSubmitting }: any) => {
+  const onSubmit = (values: IContact, { setSubmitting }: any) => {
     if (isInContacts(values.name)) {
       alert(`${values.name} is already in contacts`);
       setSubmitting(false);

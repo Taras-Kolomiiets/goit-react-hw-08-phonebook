@@ -13,6 +13,8 @@ import { Link, useLocation } from 'react-router-dom';
 import LoginForm from 'components/LoginForm';
 import RegisterForm from 'components/RegisterForm';
 import { makeStyles } from '@material-ui/core/styles';
+import IRegister from 'interfaces/IRegister';
+import ILogin from 'interfaces/ILogin';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +25,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function AuthPage({ isLoading, registerUser, loginUser }: any) {
+interface IAuth {
+  isLoading: boolean;
+  registerUser: (values: IRegister) => void;
+  loginUser: (values: ILogin) => void;
+}
+
+export default function AuthPage({
+  isLoading,
+  registerUser,
+  loginUser,
+}: IAuth) {
   const routes = ['/login', '/register'];
   const location = useLocation();
   const c = useStyles();

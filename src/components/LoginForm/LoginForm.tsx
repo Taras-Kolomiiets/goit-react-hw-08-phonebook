@@ -3,6 +3,7 @@ import { Field, Form, Formik } from 'formik';
 import { Button } from '@material-ui/core';
 import { TextField } from 'formik-material-ui';
 import { makeStyles } from '@material-ui/core/styles';
+import ILogin from 'interfaces/ILogin';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -10,7 +11,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function LoginForm({ loginUser }: any) {
+interface ILoginForm {
+  loginUser: (values: ILogin) => void;
+}
+
+export default function LoginForm({ loginUser }: ILoginForm) {
   const c = useStyles();
 
   return (
@@ -24,7 +29,7 @@ export default function LoginForm({ loginUser }: any) {
             .max(15, 'Password should be maximum 15 symbols')
             .required('Required'),
         })}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values: ILogin, { setSubmitting }) => {
           loginUser(values);
           setSubmitting(false);
         }}

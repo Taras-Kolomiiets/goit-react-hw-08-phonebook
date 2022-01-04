@@ -4,6 +4,7 @@ import { Button } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { makeStyles } from '@material-ui/core/styles';
+import IRegister from 'interfaces/IRegister';
 
 const useStyles = makeStyles(theme => ({
   field: {
@@ -11,7 +12,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function RegisterForm({ registerUser }: any) {
+interface IRegisterForm {
+  registerUser: (values: IRegister) => void;
+}
+
+export default function RegisterForm({ registerUser }: IRegisterForm) {
   const c = useStyles();
 
   return (
@@ -26,7 +31,7 @@ export default function RegisterForm({ registerUser }: any) {
             .max(15, 'Password should be maximum 15 symbols')
             .required('Required'),
         })}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values: IRegister, { setSubmitting }) => {
           registerUser(values);
           setSubmitting(false);
         }}

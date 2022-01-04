@@ -9,7 +9,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function AppBar({ isLoggedIn, userName, onLogOut }: any) {
+interface IAppBar {
+  isLoggedIn: boolean;
+  userName: string | undefined;
+  onLogOut: () => void;
+}
+
+export default function AppBar({ isLoggedIn, userName, onLogOut }: IAppBar) {
   const c = useStyles();
 
   return (

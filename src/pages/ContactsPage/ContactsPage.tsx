@@ -9,6 +9,7 @@ import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
 import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react';
+import IContact from 'interfaces/IContact';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,15 +17,23 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+interface IContactsPage {
+  contacts: IContact[];
+  onDelete: (id: string) => void;
+  onEdit: (contact: IContact, id: string) => void;
+  createContact: (values: IContact) => void;
+  isLoading: boolean;
+}
+
 export default function ContactsPage({
   contacts,
   onDelete,
   onEdit,
   createContact,
   isLoading,
-}: any) {
-  const [isOpenDialog, setIsOpenDialog] = useState(false);
-  const [currentContact, setCurrentContact] = useState(null);
+}: IContactsPage) {
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+  const [currentContact, setCurrentContact] = useState<IContact | null>(null);
   const [filter, setFilter] = useState<string>('');
 
   const shouldOpenDialog = Boolean(isOpenDialog || currentContact);
@@ -44,13 +53,13 @@ export default function ContactsPage({
     setCurrentContact(null);
   };
 
-  const handleCurrentContact = (contact: any) => {
+  const handleCurrentContact = (contact: IContact) => {
     setCurrentContact(contact);
   };
 
   const filterContactsByQuery = () => {
     const normalizedFilter = filter.toLowerCase();
-    return contacts.filter((contact: any) =>
+    return contacts.filter((contact: IContact) =>
       contact.name.toLowerCase().includes(normalizedFilter),
     );
   };

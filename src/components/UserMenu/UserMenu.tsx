@@ -14,17 +14,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function UserMenu({userName, onLogOut}: any) {
+interface IUserMenu {
+  userName: string | undefined;
+  onLogOut: () => void;
+}
+
+export default function UserMenu({ userName, onLogOut }: IUserMenu) {
   const c = useStyles();
 
   return (
     <div className={c.container}>
       <Avatar className={c.avatar} alt={userName} />
       <Typography>{userName}</Typography>
-      <IconButton
-        color="inherit"
-        onClick={() => onLogOut()}
-      >
+      <IconButton color="inherit" onClick={() => onLogOut()}>
         <ExitToAppIcon />
       </IconButton>
     </div>
